@@ -1,14 +1,39 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Weather App</title>
-        <link rel="stylesheet" href="{% static 'weather/style.css' %}">
-    </head>
-    <body>
-        <h1>Weather Checker</h1>
+<head>
+    <title>Weather App</title>
+    <link rel="stylesheet" href="{% static 'weather/style.css' %}">
+</head>
 
-        <input type="text" placeholder="Enter city">
-        <button>Check Weather</button>
-    </body>
+<body>
+
+    <h1>Weather Checker</h1>
+
+    <input type="text" id="cityInput" placeholder="Enter city">
+    <button onclick="getWeather()">Check Weather</button>
+
+    <div id="weatherResult"></div>
+
+    <script>
+        async function getWeather() {
+
+            const city = document.getElementById("cityInput").value;
+
+            const response = await fetch(
+                `/api/weather/?city=${encodeURIComponent(city)}`
+            );
+
+            const data = await response.json();
+
+            document.getElementById("weatherResult").innerHTML = `
+                <h2>${data.city}, ${data.country}</h2>
+                <p>Temperature: ${data.temperature}°C</p>
+                <p>Humidity: ${data.humidity}%</p>
+                <p>Weather: ${data.weather}</p>
+            `;
+        }
+    </script>
+
+</body>
 </html>
